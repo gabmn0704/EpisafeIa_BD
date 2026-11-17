@@ -29,3 +29,12 @@ describe("migration runner", () => {
     expect(st.every((s) => s.state === "applied")).toBe(true);
   });
 });
+
+describe("migration runner safety", () => {
+  it("rejects a migration edited after it was applied", async () => {
+    await db.query("UPDATE schema_migrations SET checksum = 'tampered' WHERE version = '001'");
+    await expect(up(db, undefined, quiet)).rejects.toThrow(/modified after being applied/);
+    const st = await status(db);
+    expect(st[0]?.state).toBe("modified");
+  });
+});
