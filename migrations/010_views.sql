@@ -42,15 +42,14 @@ SELECT d.user_id,
        ws.hrv_avg_ms,
        ws.motion_avg,
        COALESCE(sz.seizure_count, 0) AS seizures_same_day,
-       -- Etiqueta de entrenamiento: crisis dentro de las 24 h siguientes al dia registrado
-       COALESCE(nx.seizure_count, 0) > 0 AS seizure_next_day
+       -- Etiqueta de entrenamiento: hubo crisis ese dia (los habitos se registran por la manana)
+       COALESCE(sz.seizure_count, 0) > 0 AS had_seizure
 FROM daily_logs d
 LEFT JOIN meds m  ON m.user_id = d.user_id AND m.day = d.log_date
 LEFT JOIN ws      ON ws.user_id = d.user_id AND ws.day = d.log_date
-LEFT JOIN sz      ON sz.user_id = d.user_id AND sz.day = d.log_date
-LEFT JOIN sz nx   ON nx.user_id = d.user_id AND nx.day = d.log_date + 1;
+LEFT JOIN sz      ON sz.user_id = d.user_id AND sz.day = d.log_date;
 
-COMMENT ON VIEW v_daily_risk_inputs IS 'Features diarias por usuario (habitos, tomas omitidas, reloj) y etiqueta seizure_next_day';
+COMMENT ON VIEW v_daily_risk_inputs IS 'Features diarias por usuario (habitos, tomas omitidas, reloj) y etiqueta had_seizure';
 
 -- Adherencia de los ultimos 30 dias por medicamento.
 CREATE VIEW v_adherence_30d AS
