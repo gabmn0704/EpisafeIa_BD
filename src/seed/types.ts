@@ -61,7 +61,7 @@ export interface SeedSeizure {
 
 export interface SeedEmergencyEvent {
   id: string;
-  seizureId: string;
+  seizureId: string | null;
   triggeredAt: Date;
   status: "resolved" | "false_alarm" | "active" | "notified";
   latitude: number;
