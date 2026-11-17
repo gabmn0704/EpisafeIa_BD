@@ -1,0 +1,32 @@
+{
+  "name": "episafe-bd",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Esquema PostgreSQL, migraciones y seed de EpiSafe IA",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "migrate": "tsx src/migrate.ts up",
+    "migrate:status": "tsx src/migrate.ts status",
+    "seed": "tsx src/seed.ts",
+    "reset": "tsx src/reset.ts",
+    "test": "vitest run",
+    "db:up": "docker compose up -d postgres"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.16",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
