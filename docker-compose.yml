@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: episafe-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: episafe
+      POSTGRES_USER: episafe
+      POSTGRES_PASSWORD: episafe_dev
+      TZ: UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - episafe_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U episafe -d episafe"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  episafe_pgdata:
